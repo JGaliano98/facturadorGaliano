@@ -1,0 +1,175 @@
+:root{
+  --bg:#0f1220;
+  --panel:#171b2e;
+  --muted:#9aa3b2;
+  --text:#e8ecf3;
+  --accent:#7cdb8a;
+  --danger:#ff6b6b;
+  --card:#12162a;
+  --border:rgba(255,255,255,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+  background:linear-gradient(120deg,#0c0f1c, #0f1220 60%, #0c0f1c);
+  color:var(--text);
+}
+.wrap{
+  max-width:1100px; margin:32px auto; padding:0 16px;
+}
+h1{font-weight:700; letter-spacing:.2px; margin:8px 0 18px}
+.grid{
+  display:grid; gap:16px;
+}
+@media (min-width: 900px){
+  .grid-2{grid-template-columns:1fr 1fr;}
+}
+.card{
+  background:linear-gradient(180deg, var(--panel), var(--card));
+  border:1px solid var(--border);
+  border-radius:14px; padding:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+label{display:block; font-size:.9rem; color:var(--muted); margin-bottom:6px}
+input, select, textarea{
+  width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+  background:#0e1224; color:var(--text); outline:none;
+}
+textarea{min-height:82px; resize:vertical}
+.row{display:flex; gap:10px}
+.row > *{flex:1}
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--accent); color:#0b0f1d; border:none; padding:10px 14px;
+  border-radius:10px; font-weight:600; cursor:pointer;
+}
+.btn.secondary{background:transparent; color:var(--text); border:1px solid var(--border)}
+.btn.danger{background:var(--danger); color:#fff}
+table{
+  width:100%; border-collapse:collapse; background:#0e1224; border-radius:10px; overflow:hidden;
+}
+th, td{
+  padding:10px 12px; border-bottom:1px solid var(--border); text-align:left;
+}
+th{color:var(--muted); font-weight:600; background:#0f1430}
+tfoot td{border-bottom:none}
+.total-line{
+  display:flex; justify-content:flex-end; gap:18px; margin-top:8px; color:var(--text)
+}
+.right{text-align:right}
+.logo-preview{
+  width:140px; height:140px; border:1px dashed var(--border); border-radius:12px;
+  display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0e1224;
+}
+.logo-preview img{max-width:100%; max-height:100%}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+.topbar{
+  display:flex; gap:10px; align-items:center; justify-content:space-between; margin:12px 0 20px;
+}
+
+/* ======= PDF THEME (solo afecta dentro #pdf_area) ======= */
+#pdf_area .pdf-doc{
+  --pdf-accent:#C0392B; /* rojo sobrio */
+  --pdf-ink:#1d2230;
+  --pdf-muted:#717986;
+  --pdf-stroke:#e9edf3;
+  --pdf-soft:#f7f9fc;
+  background:#fff; color:var(--pdf-ink);
+  font-family: Inter, Arial, system-ui;
+  border:1px solid var(--pdf-stroke);
+  border-radius:14px;
+  padding:28px;
+  position:relative; /* para la marca de agua */
+  overflow:hidden;
+}
+#pdf_area .pdf-header{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:20px;
+}
+#pdf_area .pdf-title{
+  line-height:1; margin:0 0 4px; font-size:28px; letter-spacing:.3px;
+}
+#pdf_area .pdf-meta{ font-size:12px; color:var(--pdf-muted); display:flex; gap:8px; flex-wrap:wrap }
+#pdf_area .pdf-badge{
+  display:inline-block; padding:4px 8px; font-size:11px; border:1px solid var(--pdf-stroke); border-radius:999px; color:var(--pdf-ink);
+}
+/* Logo más grande en el PDF */
+#pdf_area .logo-box{
+  width: 200px;     /* antes 140px */
+  height: 200px;    /* antes 140px */
+  border:1px dashed var(--pdf-stroke);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; border-radius:10px; background:#fff;
+}
+
+#pdf_area .pdf-band{
+  height:6px; background:linear-gradient(90deg,var(--pdf-accent), #e26a5b 60%, #ffb4aa);
+  border-radius:999px; margin:18px 0 14px;
+}
+
+#pdf_area .pdf-info{
+  display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;
+}
+#pdf_area .pdf-card{
+  border:1px solid var(--pdf-stroke); border-radius:12px; padding:12px 14px; background:var(--pdf-soft);
+}
+#pdf_area .pdf-card h4{ margin:0 0 6px; font-size:13px; color:var(--pdf-accent); letter-spacing:.2px }
+#pdf_area .pdf-card div{ font-size:12px; line-height:1.5 }
+
+#pdf_area table.pdf-items{
+  width:100%; border-collapse:collapse; font-size:13px; margin-top:2px; border-radius:10px; overflow:hidden;
+}
+#pdf_area .pdf-items thead th{
+  background:var(--pdf-accent); color:#fff; text-align:right; padding:10px 8px; border:none; font-weight:600;
+}
+#pdf_area .pdf-items thead th:first-child{ text-align:left }
+#pdf_area .pdf-items tbody td{
+  padding:9px 8px; border-bottom:1px solid var(--pdf-stroke);
+  text-align:right; background:#fff;
+}
+#pdf_area .pdf-items tbody tr:nth-child(2n) td{ background:#fefefe }
+#pdf_area .pdf-items tbody td:first-child{ text-align:left }
+#pdf_area .pdf-items tfoot td{
+  padding:10px 8px; border-top:1px solid var(--pdf-stroke); background:#fff;
+}
+
+#pdf_area .pdf-bottom{
+  display:grid; grid-template-columns:1fr 280px; gap:16px; margin-top:16px; align-items:start;
+}
+#pdf_area .notes{
+  border:1px dashed var(--pdf-stroke); border-radius:10px; padding:10px 12px; background:#fff;
+}
+#pdf_area .notes strong{ font-size:12px; color:var(--pdf-ink) }
+#pdf_area .notes div{ font-size:12px; color:var(--pdf-muted); margin-top:6px; white-space:pre-wrap }
+
+#pdf_area .totals{
+  border:1px solid var(--pdf-stroke); border-radius:12px; padding:12px; background:var(--pdf-soft);
+}
+#pdf_area .totals .line{
+  display:flex; justify-content:space-between; align-items:center; gap:12px; margin:6px 0; font-size:13px;
+}
+#pdf_area .totals .line span{ color:var(--pdf-muted) }
+#pdf_area .totals .line strong{ color:var(--pdf-ink) }
+#pdf_area .totals .grand{
+  margin-top:8px; padding-top:8px; border-top:1px solid var(--pdf-stroke);
+  display:flex; justify-content:space-between; align-items:center; font-size:16px; font-weight:700;
+}
+
+#pdf_area .pdf-footer{
+  margin-top:20px; font-size:11px; color:var(--pdf-muted);
+  display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+#pdf_area .sig{
+  margin-top:12px; display:flex; gap:16px; align-items:center; color:var(--pdf-muted); font-size:11px;
+}
+#pdf_area .sig .line{
+  flex:1; border-bottom:1px dashed var(--pdf-stroke); height:18px;
+}
+.app-footer{
+  margin-top: 40px;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}

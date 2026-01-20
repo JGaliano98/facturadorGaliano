@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Facturador Galiano</title>
+
+<link rel="stylesheet" href="styles.css" />
+
+<!-- Librería para generar PDF en el navegador -->
+<!-- Para uso OFFLINE, descarga este archivo y cámbialo por ./vendor/html2pdf.bundle.min.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+<script src="main.js" defer></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1>FACTURADOR GALIANO 2025</h1>
+      <div class="row" style="gap:8px">
+        <button class="btn" id="genFacturaBtn">Generar FACTURA</button>
+        <button class="btn secondary" id="genProformaBtn">Generar PROFORMA</button>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Datos del negocio</h3>
+        <div class="row">
+          <div>
+            <label>Nombre</label>
+            <select id="negocio_nombre">
+              <option selected>Carnicería Charcutería Hnos. Galiano Herreros</option>
+              <option>Ángel Antonio Galiano Herreros</option>
+              <option>Pedro Miguel Galiano Herreros</option>
+            </select>
+          </div>
+          <div>
+            <label>NIF/CIF</label>
+            <select id="negocio_nif">
+              <option selected>26488128-V</option>
+              <option>75095958-S</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Dirección</label>
+        <input id="negocio_dir" placeholder="C/ Mayor 1, 28001 Madrid">
+        <div class="row">
+          <div>
+            <label>Teléfono</label>
+            <input id="negocio_tel" placeholder="600 000 000">
+          </div>
+          <div>
+            <label>Email</label>
+            <input id="negocio_email" placeholder="info@carniceria.es">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Nº de factura</label>
+            <input id="factura_num" placeholder="2025-001">
+          </div>
+          <div>
+            <label>Fecha</label>
+            <input id="factura_fecha" type="date">
+          </div>
+        </div>
+        <div class="row" style="align-items:flex-end">
+          <div>
+            <label>Logo (PNG/JPG)</label>
+            <input id="logo_input" type="file" accept="image/*">
+          </div>
+          <div class="logo-preview" id="logo_preview">
+            <span class="muted small">Sin logo</span>
+          </div>
+        </div>
+        <label>Notas (opcional)</label>
+        <textarea id="factura_notas" placeholder="¡Gracias por su compra!"></textarea>
+      </div>
+
+      <div class="card">
+        <h3>Datos del cliente</h3>
+        <label>Nombre / Razón social</label>
+        <input id="cliente_nombre" placeholder="Juan Pérez">
+        <div class="row">
+          <div>
+            <label>NIF/DNI</label>
+            <input id="cliente_nif" placeholder="12345678Z">
+          </div>
+          <div>
+            <label>Teléfono</label>
+            <input id="cliente_tel" placeholder="600 111 222">
+          </div>
+        </div>
+        <label>Dirección</label>
+        <input id="cliente_dir" placeholder="C/ Ejemplo 10, 28001 Madrid">
+        <label>Email</label>
+        <input id="cliente_email" placeholder="cliente@email.com">
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>Productos</h3>
+      <div class="muted small" style="margin-bottom:8px">Introduce precio base (sin IVA). El IVA típico: 0%, 4%, 10%, 21%.</div>
+      <table id="items_table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th style="width:110px">Cantidad</th>
+            <th style="width:140px">Precio base (€)</th>
+            <th style="width:120px">IVA (%)</th>
+            <th class="right" style="width:140px">Importe (€)</th>
+            <th style="width:60px"></th>
+          </tr>
+        </thead>
+        <tbody id="items_body">
+          <!-- filas dinámicas -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="6">
+              <div class="total-line"><span class="muted">Subtotal</span> <strong id="subtotal">0,00 €</strong></div>
+              <div class="total-line"><span class="muted">IVA total</span> <strong id="iva_total">0,00 €</strong></div>
+              <div class="total-line" style="font-size:1.2rem"><span>Total</span> <strong id="total">0,00 €</strong></div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="row" style="justify-content:flex-end; margin-top:12px">
+        <button class="btn secondary" id="addRowBtn">Añadir línea</button>
+      </div>
+    </div>
+
+    <!-- Área oculta que se convertirá en PDF -->
+    <div id="pdf_area" style="position:relative; width:100%; max-width:900px; margin:24px auto; display:none">
+      <div class="pdf-doc">
+        <div class="pdf-header">
+          <div>
+            <h1 class="pdf-title">FACTURA</h1>
+            <div class="pdf-meta">
+              <span class="pdf-badge">Nº <span id="p_num"></span></span>
+              <span class="pdf-badge">Fecha <span id="p_fecha"></span></span>
+            </div>
+          </div>
+          <div id="p_logo" class="logo-box">
+            <span style="color:#bbb; font-size:12px">Logo</span>
+          </div>
+        </div>
+
+        <div class="pdf-band"></div>
+
+        <div class="pdf-info">
+          <div class="pdf-card">
+            <h4>Emisor</h4>
+            <div id="p_negocio"></div>
+          </div>
+          <div class="pdf-card">
+            <h4>Cliente</h4>
+            <div id="p_cliente"></div>
+          </div>
+        </div>
+
+        <table class="pdf-items">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cant.</th>
+              <th>Precio base</th>
+              <th>IVA %</th>
+              <th>Importe</th>
+            </tr>
+          </thead>
+          <tbody id="p_items"></tbody>
+        </table>
+
+        <div class="pdf-bottom">
+          <div class="notes">
+            <strong>Notas</strong>
+            <div id="p_notas"></div>
+            <div class="sig">
+              <span>Firma del cliente</span>
+              <span class="line"></span>
+            </div>
+          </div>
+          <div class="totals">
+            <div class="line"><span>Subtotal</span><strong id="p_subtotal">0,00 €</strong></div>
+            <div class="line"><span>IVA total</span><strong id="p_ivat">0,00 €</strong></div>
+            <div class="grand"><span>Total</span><strong id="p_total">0,00 €</strong></div>
+          </div>
+        </div>
+
+        <div class="pdf-footer">
+          <!-- <div>Gracias por su compra.</div> -->
+          <!-- <div>IBAN: ES98 2545 5655 55585 585758857857</div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    Todos los derechos reservados. Creado por Jesús Galiano (®) para Carnicería Hnos. Galiano Herreros · 2025
+  </footer>
+</body>
+</html>
